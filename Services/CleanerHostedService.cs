@@ -1,5 +1,5 @@
 ﻿using CarDataRecognizer.Models;
-using CarDataRecognizer.Repositories.AdatRepository;
+using CarDataRecognizer.Repositories.DataRepository;
 using CarDataRecognizer.Utils.Period;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

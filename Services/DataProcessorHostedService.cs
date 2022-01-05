@@ -1,4 +1,6 @@
-﻿using CarDataRecognizer.Services.Dir;
+﻿using CarDataRecognizer.Models;
+using CarDataRecognizer.Repositories.DataRepository;
+using CarDataRecognizer.Services.Dir;
 using CarDataRecognizer.Utils.Period;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -54,12 +56,20 @@ namespace CarDataRecognizer.Services
         private async Task DoWork()
         {
             using IServiceScope scope = _scopeFactory.CreateScope();
+            IDataRepository adatRepository = scope.ServiceProvider.GetRequiredService<IDataRepository>();
 
             FileInfo[] files = _directoryService.ListFiles();
 
             foreach (FileInfo file in files)
-            { 
+            {
+                string brand = await _directoryService.GetBrand(file);
 
+                Data saveable = new();
+                saveable.Brand = brand;
+                saveable.Date = DateTime.Now;
+
+                adatRepository.Insert(saveable);
+                adatRepository.SaveChanges();
             }
  
             _logger.LogInformation("Data processing is finished.");

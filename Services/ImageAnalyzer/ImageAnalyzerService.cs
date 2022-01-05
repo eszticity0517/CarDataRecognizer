@@ -24,12 +24,9 @@ namespace CarDataRecognizer.Services.ImageAnalyzer
             Input.Dilate();
             Input.Invert();
             Input.Sharpen();
-            Input.MinimumDPI = 96;
-            Input.TargetDPI = 384;
             Input.ToGrayScale();
 
             OcrResult result = await OCR.ReadAsync(Input);
-            Regex sWhitespace = new(@"\s+");
 
             return result.Text;
         }

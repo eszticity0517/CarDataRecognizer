@@ -1,4 +1,4 @@
-using CarDataRecognizer.Repositories.AdatRepository;
+using CarDataRecognizer.Repositories.DataRepository;
 using CarDataRecognizer.Services;
 using CarDataRecognizer.Utils.Period;
 using CarDataRecognizer.ConfigSections;

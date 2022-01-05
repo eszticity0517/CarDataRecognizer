@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace CarDataRecognizer.Repositories.AdatRepository
+namespace CarDataRecognizer.Repositories.DataRepository
 {
     public class DataRepository : Repository<Data>, IDataRepository
     {

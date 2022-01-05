@@ -29,7 +29,7 @@ namespace CarDataRecognizer.Services.Dir
         public FileInfo[] ListFiles()
         {
             // D:\kepek
-            DirectoryInfo directoryInfo = new DirectoryInfo("");
+            DirectoryInfo directoryInfo = new DirectoryInfo("@D://kepek");
 
             FileInfo[] Images = directoryInfo.GetFiles("*.jpg");
 
@@ -42,7 +42,7 @@ namespace CarDataRecognizer.Services.Dir
             using var stream = file.OpenRead();
             System.IO.BinaryReader textReader = new(stream);
             // JGP képeket 1000kb körül lehet maximalizálni.
-
+            textReader.ReadBytes(10000000);
             // A képről levett adatokat hozzáadjuk.
             string brand = await _imageAnalyzerService.ExtractImageDataFromStream(stream);
             return brand;

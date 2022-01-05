@@ -43,6 +43,8 @@ namespace CarDataRecognizer.Utils.Period
 
             switch (_config.DataProcessingUnit)
             {
+                case "sec":
+                    return TimeSpan.FromSeconds(frequency);
                 case "min":
                 case "minute":
                     return TimeSpan.FromMinutes(frequency);
