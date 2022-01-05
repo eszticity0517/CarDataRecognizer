@@ -15,7 +15,7 @@ namespace CarDataRecognizer.Repositories.AdatRepository
 
         public IQueryable<Data> GetAllBeforeDateTime(DateTime date)
         {
-            return _dbContext.Adatok
+            return _dbContext.Datas
                 .Where(adat => adat.Date < date);
         }
     }

@@ -10,7 +10,7 @@ namespace CarDataRecognizer
 
         }
 
-        public DbSet<Data> Adatok { get; set; }
+        public DbSet<Data> Datas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
