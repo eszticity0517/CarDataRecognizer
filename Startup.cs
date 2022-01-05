@@ -1,3 +1,4 @@
+using CarDataRecognizer.Repositories.AdatRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,10 @@ namespace CarDataRecognizer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            // Add framework services.
+            services.AddDbContext<DatabaseContext>();
+            // Transient lifetime services are created each time they are requested. This lifetime works best for lightweight, stateless services.
+            services.AddTransient<IAdatRepository, AdatRepository>();
             services.AddControllers();
         }
 
