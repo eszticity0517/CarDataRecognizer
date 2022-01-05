@@ -14,17 +14,7 @@ namespace CarDataRecognizer.Services.ImageAnalyzer
             IronTesseract OCR = new() { };
             OCR.Configuration.ReadBarCodes = false;
 
-            // Optimised for details over speed.
-            OCR.Language = OcrLanguage.LatinAlphabetBest;
-
             using OcrInput Input = new(image);
-            Input.Binarize();
-            Input.Contrast();
-            Input.DeNoise();
-            Input.Dilate();
-            Input.Invert();
-            Input.Sharpen();
-            Input.ToGrayScale();
 
             OcrResult result = await OCR.ReadAsync(Input);
 
