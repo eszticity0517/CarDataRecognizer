@@ -29,7 +29,7 @@ namespace CarDataRecognizer.Services.Dir
         public FileInfo[] ListFiles()
         {
             // D:\kepek
-            DirectoryInfo directoryInfo = new DirectoryInfo("@D://kepek");
+            DirectoryInfo directoryInfo = new DirectoryInfo(@"D:\kepek");
 
             FileInfo[] Images = directoryInfo.GetFiles("*.jpg");
 
