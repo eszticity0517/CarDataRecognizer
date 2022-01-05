@@ -31,7 +31,7 @@ namespace CarDataRecognizer
             // Add framework services.
             services.AddDbContext<DatabaseContext>();
             // Transient lifetime services are created each time they are requested. This lifetime works best for lightweight, stateless services.
-            services.AddTransient<IAdatRepository, AdatRepository>();
+            services.AddTransient<IDataRepository, DataRepository>();
             services.AddControllers();
         }
 

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace CarDataRecognizer.Services
 {
     /// <summary>
-    /// Meghatározott időközönként törli az önkormányzati adatbázisba már áttöltött adatokat.
+    /// Deletes data from the Data table periodically.
     /// </summary>
     public class CleanerHostedService : IHostedService, IDisposable
     {
@@ -39,7 +39,7 @@ namespace CarDataRecognizer.Services
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("CleanerService indítása.");
+            _logger.LogInformation("CleanerService is starting.");
             _timer = new Timer(ExecuteTask, null, TimeSpan.Zero, _periodProvider.ProvidePeriod());
 
             return Task.CompletedTask;
@@ -47,16 +47,16 @@ namespace CarDataRecognizer.Services
 
         private void ExecuteTask(object state)
         {
-            // Itt megállítjuk a Timer-t, a DoWork metódus végén pedig újra elindítjuk.
+            // Stopping timer here, to restart it at the end of DoWork method.
             _timer?.Change(Timeout.Infinite, 0);
             doWorkTask = DoWork();
         }
         private async Task DoWork()
         {
             using IServiceScope scope = _scopeFactory.CreateScope();
-            IAdatRepository adatRepository = scope.ServiceProvider.GetRequiredService<IAdatRepository>();
+            IDataRepository adatRepository = scope.ServiceProvider.GetRequiredService<IDataRepository>();
 
-            // Kikérjük az önkormányzati adatbázisba már átmásolt elemeket.
+            // Get entries befor the determined oldest date.
             IQueryable<Adat> adatok = adatRepository.GetAllBeforeDateTime(_periodProvider.ProvideOldestDatetime());
 
             foreach (Adat adat in adatok)
@@ -66,15 +66,14 @@ namespace CarDataRecognizer.Services
 
             await adatRepository.SaveChangesAsync();
 
-            _logger.LogInformation("Az adatok törlése befejeződött.");
+            _logger.LogInformation("Data deletion is finished.");
 
-            // Befejeződött a feladat, már csak az innen számított következő intervallumban menjen újra a task.
             _timer.Change(_periodProvider.ProvidePeriod(), TimeSpan.FromMilliseconds(-1));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("CleanerService leállítása.");
+            _logger.LogInformation("CleanerService is stopping.");
             return Task.CompletedTask;
         }
 

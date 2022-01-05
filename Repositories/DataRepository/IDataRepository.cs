@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CarDataRecognizer.Repositories.AdatRepository
 {
-    public interface IAdatRepository : IRepository<Adat>
+    public interface IDataRepository : IRepository<Adat>
     {
         IQueryable<Adat> GetByKameraIdAndDate(int kameraId, DateTime date);
         IQueryable<Adat> GetByPlateNumberAndDate(string plateNumber, DateTime date);

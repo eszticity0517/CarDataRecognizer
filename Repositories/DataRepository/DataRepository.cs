@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace CarDataRecognizer.Repositories.AdatRepository
 {
-    public class AdatRepository : Repository<Adat>, IAdatRepository
+    public class DataRepository : Repository<Adat>, IDataRepository
     {
         public DatabaseContext DatabaseContext
         {
             get { return _dbContext; }
         }
 
-        public AdatRepository(DatabaseContext context) : base(context) { }
+        public DataRepository(DatabaseContext context) : base(context) { }
 
         public IQueryable<Adat> GetByKameraIdAndDate(int kameraId, DateTime date)
         {
