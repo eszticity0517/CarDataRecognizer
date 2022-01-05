@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using CarDataRecognizer.Services.Dir;
 
 namespace CarDataRecognizer
 {
@@ -34,6 +35,7 @@ namespace CarDataRecognizer
             services.AddDbContext<DatabaseContext>();
             // Transient lifetime services are created each time they are requested. This lifetime works best for lightweight, stateless services.
             services.AddTransient<IDataRepository, DataRepository>();
+            services.AddTransient<IDirectoryService, DirectoryService>();
             services.AddControllers();
         }
 
