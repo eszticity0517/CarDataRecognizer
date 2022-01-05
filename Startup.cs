@@ -27,6 +27,7 @@ namespace CarDataRecognizer
             services.Configure<Config>(Configuration.GetSection("Config"));
 
             services.AddHostedService<CleanerHostedService>();
+            services.AddHostedService<DataProcessorHostedService>();
 
             // Add framework services.
             services.AddDbContext<DatabaseContext>();
