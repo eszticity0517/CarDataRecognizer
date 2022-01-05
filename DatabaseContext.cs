@@ -10,15 +10,10 @@ namespace CarDataRecognizer
 
         }
 
-        public DbSet<Adat> Adatok { get; set; }
+        public DbSet<Data> Adatok { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Adat>(b =>
-            {
-                b.HasIndex(e => new { e.Date, e.PlateNumber }).IsUnique();
-            });
-
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CarDataRecognizer.Repositories.AdatRepository
 {
-    public class DataRepository : Repository<Adat>, IDataRepository
+    public class DataRepository : Repository<Data>, IDataRepository
     {
         public DatabaseContext DatabaseContext
         {
@@ -13,20 +13,7 @@ namespace CarDataRecognizer.Repositories.AdatRepository
 
         public DataRepository(DatabaseContext context) : base(context) { }
 
-        public IQueryable<Adat> GetByKameraIdAndDate(int kameraId, DateTime date)
-        {
-            return _dbContext.Adatok
-                .Where(adat => adat.KameraId == kameraId && adat.Date > date)
-                .OrderByDescending(adat => adat.Date);
-        }
-
-        public IQueryable<Adat> GetByPlateNumberAndDate(string plateNumber, DateTime date)
-        {
-            return _dbContext.Adatok
-              .Where(adat => adat.PlateNumber == plateNumber && adat.Date == date);
-        }
-
-        public IQueryable<Adat> GetAllBeforeDateTime(DateTime date)
+        public IQueryable<Data> GetAllBeforeDateTime(DateTime date)
         {
             return _dbContext.Adatok
                 .Where(adat => adat.Date < date);

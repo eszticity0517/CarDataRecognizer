@@ -57,9 +57,9 @@ namespace CarDataRecognizer.Services
             IDataRepository adatRepository = scope.ServiceProvider.GetRequiredService<IDataRepository>();
 
             // Get entries befor the determined oldest date.
-            IQueryable<Adat> adatok = adatRepository.GetAllBeforeDateTime(_periodProvider.ProvideOldestDatetime());
+            IQueryable<Data> adatok = adatRepository.GetAllBeforeDateTime(_periodProvider.ProvideOldestDatetime());
 
-            foreach (Adat adat in adatok)
+            foreach (Data adat in adatok)
             {
                 adatRepository.Delete(adat.Id);
             }

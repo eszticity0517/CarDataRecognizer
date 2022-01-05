@@ -4,15 +4,12 @@ using System.Linq;
 
 namespace CarDataRecognizer.Repositories.AdatRepository
 {
-    public interface IDataRepository : IRepository<Adat>
+    public interface IDataRepository : IRepository<Data>
     {
-        IQueryable<Adat> GetByKameraIdAndDate(int kameraId, DateTime date);
-        IQueryable<Adat> GetByPlateNumberAndDate(string plateNumber, DateTime date);
-
         /// <summary>
-        /// Visszaadja a megadott dátumnál régebbi elemeket.
+        /// Returns older element than the given date.
         /// </summary>
         /// <returns></returns>
-        IQueryable<Adat> GetAllBeforeDateTime(DateTime date);
+        IQueryable<Data> GetAllBeforeDateTime(DateTime date);
     }
 }
