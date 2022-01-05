@@ -1,8 +1,10 @@
-﻿using CarDataRecognizer.Utils.Period;
+﻿using CarDataRecognizer.Services.Dir;
+using CarDataRecognizer.Utils.Period;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,15 +22,19 @@ namespace CarDataRecognizer.Services
 
         private Task doWorkTask;
 
+        private IDirectoryService _directoryService;
+
         public DataProcessorHostedService(
            IServiceScopeFactory scopeFactory,
            ILogger<CleanerHostedService> logger,
-           IPeriodProvider periodProvider
+           IPeriodProvider periodProvider,
+           IDirectoryService directoryService
          )
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
             _periodProvider = periodProvider;
+            _directoryService = directoryService;
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -49,6 +55,13 @@ namespace CarDataRecognizer.Services
         {
             using IServiceScope scope = _scopeFactory.CreateScope();
 
+            FileInfo[] files = _directoryService.ListFiles();
+
+            foreach (FileInfo file in files)
+            { 
+
+            }
+ 
             _logger.LogInformation("Data processing is finished.");
 
             _timer.Change(_periodProvider.ProvideProcessingPeriod(), TimeSpan.FromMilliseconds(-1));
