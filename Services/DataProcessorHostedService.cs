@@ -33,7 +33,7 @@ namespace CarDataRecognizer.Services
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("DataProcessorHostedService is starting.");
-            _timer = new Timer(ExecuteTask, null, TimeSpan.Zero, _periodProvider.ProvidePeriod());
+            _timer = new Timer(ExecuteTask, null, TimeSpan.Zero, _periodProvider.ProvideProcessingPeriod());
 
             return Task.CompletedTask;
         }
@@ -51,7 +51,7 @@ namespace CarDataRecognizer.Services
 
             _logger.LogInformation("Data processing is finished.");
 
-            _timer.Change(_periodProvider.ProvidePeriod(), TimeSpan.FromMilliseconds(-1));
+            _timer.Change(_periodProvider.ProvideProcessingPeriod(), TimeSpan.FromMilliseconds(-1));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)

@@ -13,7 +13,7 @@ namespace CarDataRecognizer.Utils.Period
             _config = config.Value;
         }
 
-        public TimeSpan ProvidePeriod()
+        public TimeSpan ProvideCleaningPeriod()
         {
             int frequency = _config.CleanFrequency;
 
@@ -35,6 +35,24 @@ namespace CarDataRecognizer.Utils.Period
         {
             int intervallum = _config.CleanInterval;
             return DateTime.Now.AddDays(-intervallum);
+        }
+
+        public TimeSpan ProvideProcessingPeriod()
+        {
+            int frequency = _config.DataProcessingFrequency;
+
+            switch (_config.DataProcessingUnit)
+            {
+                case "min":
+                case "minute":
+                    return TimeSpan.FromMinutes(frequency);
+                case "hour":
+                    return TimeSpan.FromHours(frequency);
+                case "day":
+                    return TimeSpan.FromDays(frequency);
+                default:
+                    return TimeSpan.FromDays(frequency);
+            }
         }
     }
 }

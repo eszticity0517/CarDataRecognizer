@@ -8,7 +8,13 @@ namespace CarDataRecognizer.Utils.Period
         /// Determines CleanerHostedService period timing.
         /// </summary>
         /// <returns></returns>
-        TimeSpan ProvidePeriod();
+        TimeSpan ProvideCleaningPeriod();
+
+        /// <summary>
+        /// Determines DataProcessorHostedService period timing.
+        /// </summary>
+        /// <returns></returns>
+        TimeSpan ProvideProcessingPeriod();
 
         /// <summary>
         /// Provides oldest date to maintain data from.

@@ -40,7 +40,7 @@ namespace CarDataRecognizer.Services
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("CleanerService is starting.");
-            _timer = new Timer(ExecuteTask, null, TimeSpan.Zero, _periodProvider.ProvidePeriod());
+            _timer = new Timer(ExecuteTask, null, TimeSpan.Zero, _periodProvider.ProvideCleaningPeriod());
 
             return Task.CompletedTask;
         }
@@ -68,7 +68,7 @@ namespace CarDataRecognizer.Services
 
             _logger.LogInformation("Data deletion is finished.");
 
-            _timer.Change(_periodProvider.ProvidePeriod(), TimeSpan.FromMilliseconds(-1));
+            _timer.Change(_periodProvider.ProvideCleaningPeriod(), TimeSpan.FromMilliseconds(-1));
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
