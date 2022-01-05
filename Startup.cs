@@ -1,15 +1,12 @@
 using CarDataRecognizer.Repositories.AdatRepository;
+using CarDataRecognizer.Services;
+using CarDataRecognizer.Utils.Period;
+using Kamera.ConfigSections;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CarDataRecognizer
 {
@@ -25,6 +22,12 @@ namespace CarDataRecognizer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IPeriodProvider, PeriodProvider>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.Configure<Config>(Configuration.GetSection("Config"));
+
+            services.AddHostedService<CleanerHostedService>();
+
             // Add framework services.
             services.AddDbContext<DatabaseContext>();
             // Transient lifetime services are created each time they are requested. This lifetime works best for lightweight, stateless services.
