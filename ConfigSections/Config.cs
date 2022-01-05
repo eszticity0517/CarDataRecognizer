@@ -1,4 +1,4 @@
-﻿namespace Kamera.ConfigSections
+﻿namespace CarDataRecognizer.ConfigSections
 {
     public class Config
     {

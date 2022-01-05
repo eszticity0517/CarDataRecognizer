@@ -1,4 +1,4 @@
-﻿using Kamera.ConfigSections;
+﻿using CarDataRecognizer.ConfigSections;
 using Microsoft.Extensions.Options;
 using System;
 

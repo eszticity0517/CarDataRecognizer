@@ -18,7 +18,7 @@ Since MySQL is the integrated one, please use XAMPP: https://www.apachefriends.o
 4. In the Migrations folder, now you can see your newest changes, and the __EFMigrationsHistory database table now contains a new entity as well
 
 ### Deployment
-dotnet publish -c Release -r win-x64 --output ./bin Kamera.sln
+dotnet publish -c Release -r win-x64 --output ./bin CarDataRecognizer.sln
 
 Now the /bin folder is filled with new content.
 
