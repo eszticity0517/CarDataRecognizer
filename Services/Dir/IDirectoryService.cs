@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace CarDataRecognizer.Services.Dir
-{
-    public interface IDirectoryService
-    {
-        FileInfo[] ListFiles();
+namespace CarDataRecognizer.Services.Dir;
 
-        Task<string> GetBrand(FileInfo file);
-    }
+public interface IDirectoryService
+{
+    FileInfo[] ListFiles();
+
+    Task<string> GetBrand(FileInfo file);
 }
+

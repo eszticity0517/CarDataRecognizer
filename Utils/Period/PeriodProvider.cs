@@ -2,59 +2,48 @@
 using Microsoft.Extensions.Options;
 using System;
 
-namespace CarDataRecognizer.Utils.Period
+namespace CarDataRecognizer.Utils.Period;
+
+public class PeriodProvider : IPeriodProvider
 {
-    public class PeriodProvider : IPeriodProvider
+    private readonly Config _config;
+
+    public PeriodProvider(IOptions<Config> config)
     {
-        private readonly Config _config;
+        _config = config.Value;
+    }
 
-        public PeriodProvider(IOptions<Config> config)
+    public TimeSpan ProvideCleaningPeriod()
+    {
+        int frequency = _config.CleanFrequency;
+
+        return _config.CleanUnit switch
         {
-            _config = config.Value;
-        }
+            "min" or "minute" => TimeSpan.FromMinutes(frequency),
+            "hour" => TimeSpan.FromHours(frequency),
+            "day" => TimeSpan.FromDays(frequency),
+            _ => TimeSpan.FromDays(frequency),
+        };
+    }
 
-        public TimeSpan ProvideCleaningPeriod()
+    public DateTime ProvideOldestDatetime()
+    {
+        int interval = _config.CleanInterval;
+        return DateTime.Now.AddDays(-interval);
+    }
+
+    public TimeSpan ProvideProcessingPeriod()
+    {
+        int frequency = _config.DataProcessingFrequency;
+
+        return _config.DataProcessingUnit switch
         {
-            int frequency = _config.CleanFrequency;
-
-            switch (_config.CleanUnit)
-            {
-                case "min":
-                case "minute":
-                    return TimeSpan.FromMinutes(frequency);
-                case "hour":
-                    return TimeSpan.FromHours(frequency);
-                case "day":
-                    return TimeSpan.FromDays(frequency);
-                default:
-                    return TimeSpan.FromDays(frequency);
-            }
-        }
-
-        public DateTime ProvideOldestDatetime()
-        {
-            int intervallum = _config.CleanInterval;
-            return DateTime.Now.AddDays(-intervallum);
-        }
-
-        public TimeSpan ProvideProcessingPeriod()
-        {
-            int frequency = _config.DataProcessingFrequency;
-
-            switch (_config.DataProcessingUnit)
-            {
-                case "sec":
-                    return TimeSpan.FromSeconds(frequency);
-                case "min":
-                case "minute":
-                    return TimeSpan.FromMinutes(frequency);
-                case "hour":
-                    return TimeSpan.FromHours(frequency);
-                case "day":
-                    return TimeSpan.FromDays(frequency);
-                default:
-                    return TimeSpan.FromDays(frequency);
-            }
-        }
+            "sec" => TimeSpan.FromSeconds(frequency),
+            "min" or "minute" => TimeSpan.FromMinutes(frequency),
+            "hour" => TimeSpan.FromHours(frequency),
+            "day" => TimeSpan.FromDays(frequency),
+            _ => TimeSpan.FromDays(frequency),
+        };
     }
 }
+

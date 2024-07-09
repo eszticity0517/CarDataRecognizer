@@ -2,29 +2,29 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace CarDataRecognizer
+namespace CarDataRecognizer;
+
+public class DatabaseContext : DbContext
 {
-    public class DatabaseContext : DbContext
+
+    protected readonly IConfiguration Configuration;
+
+    public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration) : base(options)
     {
-        protected readonly IConfiguration Configuration;
+        Configuration = configuration;
+    }
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options, IConfiguration configuration) : base(options)
-        {
-            Configuration = configuration;
-        }
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    {
+        // Connect to mysql with connection string from app settings.
+        string? connectionString = Configuration.GetConnectionString("Database");
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-            // connect to mysql with connection string from app settings
-            var connectionString = Configuration.GetConnectionString("Database");
-            options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        }
+    public DbSet<Data> Datas => Set<Data>();
 
-        public DbSet<Data> Datas { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
     }
 }

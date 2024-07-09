@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace CarDataRecognizer.Services.ImageAnalyzer
+namespace CarDataRecognizer.Services.ImageAnalyzer;
+public interface IImageAnalyzerService
 {
-    public interface IImageAnalyzerService
-    {
-        Task<string> ExtractImageDataFromStream(Stream stream);
-    }
+    Task<string> ExtractImageDataFromStream(Stream stream);
 }

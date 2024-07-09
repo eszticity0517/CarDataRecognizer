@@ -4,9 +4,8 @@ Setup, coding guidelines, deployment ...
 ## Set up local environment
 .NET Core is cross-platform and no restrictions were included into the code, I myself developed it on Win 10 OS.
 
-1. Download Visual Studio Community 2019 along with .NET 5.0
-2. When installing, select .NET cross platform addition
-3. Type "dotnet --version" in the terminal to check if the version matches the above
+1. Download Visual Studio Community 2022 along with .NET 8.0
+2. Type "dotnet --version" in the terminal to check if the version matches the above
 
 ## Database
 Since MySQL is the integrated one, please use XAMPP: https://www.apachefriends.org/index.html

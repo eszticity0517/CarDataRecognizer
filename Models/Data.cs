@@ -2,8 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CarDataRecognizer.Models
-{
+namespace CarDataRecognizer.Models;
+
     public class Data
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,6 +15,5 @@ namespace CarDataRecognizer.Models
         public DateTime? Date { get; set; }
 
         [Column(TypeName = "VARCHAR(100)")]
-        public string Brand { get; set; }
+        public required string Brand { get; set; }
     }
-}

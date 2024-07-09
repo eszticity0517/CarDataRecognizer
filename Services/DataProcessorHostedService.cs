@@ -2,91 +2,95 @@
 using CarDataRecognizer.Repositories.DataRepository;
 using CarDataRecognizer.Services.Dir;
 using CarDataRecognizer.Utils.Period;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CarDataRecognizer.Services
+namespace CarDataRecognizer.Services;
+
+public class DataProcessorHostedService : IHostedService, IDisposable
 {
-    public class DataProcessorHostedService : IHostedService, IDisposable
+    private readonly ILogger _logger;
+
+    private readonly IServiceScopeFactory _scopeFactory;
+
+    private Timer? _timer;
+
+    private readonly IPeriodProvider _periodProvider;
+
+    private Task? doWorkTask;
+
+    private readonly IDirectoryService _directoryService;
+
+    public DataProcessorHostedService(
+       IServiceScopeFactory scopeFactory,
+       ILogger<CleanerHostedService> logger,
+       IPeriodProvider periodProvider,
+       IDirectoryService directoryService
+     )
     {
-        private readonly ILogger _logger;
+        _logger = logger;
+        _scopeFactory = scopeFactory;
+        _periodProvider = periodProvider;
+        _directoryService = directoryService;
+    }
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("DataProcessorHostedService is starting.");
+        _timer = new Timer(ExecuteTask, null, TimeSpan.Zero, _periodProvider.ProvideProcessingPeriod());
 
-        private readonly IServiceScopeFactory _scopeFactory;
+        return Task.CompletedTask;
+    }
 
-        private Timer _timer;
+    private void ExecuteTask(object? state)
+    {
+        // Stopping timer here, to restart it at the end of DoWork method.
+        _timer?.Change(Timeout.Infinite, 0);
+        doWorkTask = DoWork();
+    }
 
-        private readonly IPeriodProvider _periodProvider;
+    private async Task DoWork()
+    {
+        using IServiceScope? scope = _scopeFactory.CreateScope();
+        IDataRepository adatRepository = scope.ServiceProvider.GetRequiredService<IDataRepository>();
 
-        private Task doWorkTask;
+        FileInfo[] files = _directoryService.ListFiles();
 
-        private IDirectoryService _directoryService;
-
-        public DataProcessorHostedService(
-           IServiceScopeFactory scopeFactory,
-           ILogger<CleanerHostedService> logger,
-           IPeriodProvider periodProvider,
-           IDirectoryService directoryService
-         )
+        foreach (FileInfo file in files)
         {
-            _logger = logger;
-            _scopeFactory = scopeFactory;
-            _periodProvider = periodProvider;
-            _directoryService = directoryService;
-        }
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("DataProcessorHostedService is starting.");
-            _timer = new Timer(ExecuteTask, null, TimeSpan.Zero, _periodProvider.ProvideProcessingPeriod());
+            string brand = await _directoryService.GetBrand(file);
 
-            return Task.CompletedTask;
-        }
-
-        private void ExecuteTask(object state)
-        {
-            // Stopping timer here, to restart it at the end of DoWork method.
-            _timer?.Change(Timeout.Infinite, 0);
-            doWorkTask = DoWork();
-        }
-
-        private async Task DoWork()
-        {
-            using IServiceScope scope = _scopeFactory.CreateScope();
-            IDataRepository adatRepository = scope.ServiceProvider.GetRequiredService<IDataRepository>();
-
-            FileInfo[] files = _directoryService.ListFiles();
-
-            foreach (FileInfo file in files)
+            Data saveable = new()
             {
-                string brand = await _directoryService.GetBrand(file);
+                Brand = brand,
+                Date = DateTime.Now
+            };
 
-                Data saveable = new();
-                saveable.Brand = brand;
-                saveable.Date = DateTime.Now;
-
-                adatRepository.Insert(saveable);
-                adatRepository.SaveChanges();
-            }
- 
-            _logger.LogInformation("Data processing is finished.");
-
-            _timer.Change(_periodProvider.ProvideProcessingPeriod(), TimeSpan.FromMilliseconds(-1));
+            adatRepository.Insert(saveable);
+            adatRepository.SaveChanges();
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("DataProcessorHostedService is stopping.");
-            return Task.CompletedTask;
-        }
+        _logger.LogInformation("Data processing is finished.");
+
+        _timer?.Change(_periodProvider.ProvideProcessingPeriod(), TimeSpan.FromMilliseconds(-1));
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("DataProcessorHostedService is stopping.");
+        return Task.CompletedTask;
+    }
 
 
-        public void Dispose()
-        {
-            _timer?.Dispose();
-        }
+    public void Dispose()
+    {
+        _timer?.Dispose();
     }
 }
+

@@ -1,25 +1,25 @@
 ﻿using System;
 
-namespace CarDataRecognizer.Utils.Period
+namespace CarDataRecognizer.Utils.Period;
+
+public interface IPeriodProvider
 {
-    public interface IPeriodProvider
-    {
-        /// <summary>
-        /// Determines CleanerHostedService period timing.
-        /// </summary>
-        /// <returns></returns>
-        TimeSpan ProvideCleaningPeriod();
+    /// <summary>
+    /// Determines CleanerHostedService period timing.
+    /// </summary>
+    /// <returns></returns>
+    TimeSpan ProvideCleaningPeriod();
 
-        /// <summary>
-        /// Determines DataProcessorHostedService period timing.
-        /// </summary>
-        /// <returns></returns>
-        TimeSpan ProvideProcessingPeriod();
+    /// <summary>
+    /// Determines DataProcessorHostedService period timing.
+    /// </summary>
+    /// <returns></returns>
+    TimeSpan ProvideProcessingPeriod();
 
-        /// <summary>
-        /// Provides oldest date to maintain data from.
-        /// </summary>
-        /// <returns></returns>
-        DateTime ProvideOldestDatetime();
-    }
+    /// <summary>
+    /// Provides oldest date to maintain data from.
+    /// </summary>
+    /// <returns></returns>
+    DateTime ProvideOldestDatetime();
 }
+
